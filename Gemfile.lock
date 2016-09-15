@@ -15,10 +15,8 @@ GEM
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   httparty
   sinatra
-
-BUNDLED WITH
-   1.10.6

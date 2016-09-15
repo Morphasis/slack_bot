@@ -12,7 +12,7 @@ post '/gateway' do
     when 'issues'
       resp = HTTParty.get(repo_url)
       resp = JSON.parse resp.body
-      respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
+      respond_message "windows update There are #{resp['open_issues_count']} open issues on #{repo}"
   end
 end
 
