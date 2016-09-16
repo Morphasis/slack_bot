@@ -12,8 +12,11 @@ post '/gateway' do
   case action
     when 'issues'
       resp = HTTParty.get(repo_url)
+      puts resp
       resp = JSON.parse resp.body
       respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
+    when 'help'
+      respond_message "Hi there my name is Kong Boy. I'm here to provide interesting and new boy functionality https:\/\/my.slack.com\/emoji\/bowtie\/46ec6f2bb0.png"
   end
 end
 
