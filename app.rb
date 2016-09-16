@@ -16,7 +16,7 @@ post '/gateway' do
       resp = JSON.parse resp.body
       respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
     when 'help'
-      respond_message "Hi there my name is Kong Boy. I'm here to provide interesting and new boy functionality https:\/\/my.slack.com\/emoji\/bowtie\/46ec6f2bb0.png"
+      respond_message "Hi there my name is Kong Bot. I'm here to provide interesting and new bot functionality :bowtie: currently supported commands are issues_(repo) to get number of PR's"
   end
 end
 
