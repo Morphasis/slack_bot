@@ -24,8 +24,8 @@ post '/gateway' do
       resp = HTTParty.get(activity_url)
       resp = JSON.parse resp.body
       respond_message "Most recent commit (may not be work related)
-      (currently in progress as it works per push requires more logic :robot_face:)
-      #{resp[0]["payload"]["commits"][0]["message"]}"
+ (currently in progress as it works per push requires more logic :robot_face:)
+ Commit message: #{resp[0]["payload"]["commits"][0]["message"]}"
   end
 end
 
