@@ -18,15 +18,14 @@ post '/gateway' do
       respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
     when 'help'
       respond_message "Hi there my name is Kong Bot. I'm here to provide
-      interesting and new bot functionality :bowtie: currently supported
-       commands are issues_(repo) to get number of PR's, help and activity_(person)"
+ interesting and new bot functionality :bowtie: currently supported
+ commands are issues_(repo) to get number of PR's, help and activity_(person)"
     when 'activity'
       resp = HTTParty.get(activity_url)
       resp = JSON.parse resp.body
-      respond_message "Three most recent commits (may not be work related) (currently in progress as it works per push requires more logic :robot_face:)
-      #{resp[0]["payload"]["commits"][0]["message"]}
-      #{resp[0]["payload"]["commits"][1]["message"]}
-      #{resp[0]["payload"]["commits"][2]["message"]}"
+      respond_message "Most recent commit (may not be work related)
+      (currently in progress as it works per push requires more logic :robot_face:)
+      #{resp[0]["payload"]["commits"][0]["message"]}"
   end
 end
 
