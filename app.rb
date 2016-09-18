@@ -31,7 +31,8 @@ post '/gateway' do
       puts "#{commit_messages} END"
       respond_message "Most recent commit (may not be work related)
  (currently in progress as it works per push requires more logic :robot_face:)
- Commit message: '#{commit_messages.join("'\n'")}'"
+ Commit messages:
+ '#{commit_messages.join("'\n'")}'"
   end
 end
 
