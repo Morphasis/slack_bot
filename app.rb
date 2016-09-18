@@ -3,7 +3,6 @@ require 'httparty'
 require 'json'
 
 post '/gateway' do
-  puts "PARAMS: #{params.inspect}"
   message = params[:text].gsub(params[:trigger_word], '').strip
 
   action, repo = message.split('_').map {|c| c.strip.downcase }
@@ -23,9 +22,16 @@ post '/gateway' do
     when 'activity'
       resp = HTTParty.get(activity_url)
       resp = JSON.parse resp.body
+      commit_messages = Array.new
+      resp.each { |x|
+        if (!x["payload"].nil? && !x["payload"]["commits"].nil?)
+          commit_messages.push(x["payload"]["commits"][0]["message"])
+        end
+      }
+      puts "#{commit_messages} END"
       respond_message "Most recent commit (may not be work related)
  (currently in progress as it works per push requires more logic :robot_face:)
- Commit message: #{resp[0]["payload"]["commits"][0]["message"]}"
+ Commit message: '#{commit_messages.join("'\n'")}'"
   end
 end
 
