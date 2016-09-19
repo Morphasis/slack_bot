@@ -26,7 +26,7 @@ post '/gateway' do
         total_issue_summary.push(x["created_at"])
       }
       respond_message "There are #{resp['open_issues_count']} open issues on #{repo} and here is a summary of all of them:
- '#{total_issue_summary.join("'\n'")}'"
+ '#{total_issue_summary.join("\n")}'"
     when 'issues'
       resp = HTTParty.get(repo_url)
       resp = JSON.parse resp.body
