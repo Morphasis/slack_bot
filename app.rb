@@ -45,7 +45,9 @@ class PullRequest < GitHubThingsBase
     issues = total_issue_summary.map do |issue|
       "".tap do |issue_string|
         issue_string << "Title: #{issue[:title]}\n"
-        issue_string << "Login: #{issue[:login]}"
+        issue_string << "Login: #{issue[:login]}\n"
+        issue_string << "Url: #{issue[:url]}\n"
+        issue_string << "Created At: #{issue[:created_at]}"
       end
     end
 
