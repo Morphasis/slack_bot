@@ -49,6 +49,8 @@ class PullRequest < GitHubThingsBase
       end
     end
 
+    issues.uniq!
+
     "There are #{issues.count} open issues on #{repository} and here is a summary of all of them: #{issues.join("\n\n")}"
   end
 
