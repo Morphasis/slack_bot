@@ -4,6 +4,56 @@ require 'json'
 
 # {"text"=>"kong activity_morphasis", "trigger_word"=>"kong"}
 
+class GitHubThingsBase
+
+  def repository_url
+    "https://api.github.com/repos/#{repository}"
+  end
+
+  def issues_url
+    "https://api.github.com/repos/#{repository}/issues/events"
+  end
+
+  def repository_body
+    JSON.parse(HTTParty.get(repository_url).body)
+  end
+
+  def issues_body
+    JSON.parse(HTTParty.get(issues_url).body)
+  end
+end
+
+class PullRequest < GitHubThingsBase
+
+  attr_accessor :repository
+  def initialize(repository)
+    @repository = repository
+  end
+
+  def message_output
+    total_issue_summary = []
+
+    total_issue_summary = issues_body.map do |issue|
+      {
+        title: issue["issue"]["title"],
+        login: issue["actor"]["login"],
+        url: issue["issue"]["html_url"],
+        created_at: issue["created_at"]
+      }
+    end
+
+    issues = total_issue_summary.map do |issue|
+      "".tap do |issue_string|
+        issue_string << "Title: #{issue[:title]}\n"
+        issue_string << "Login: #{issue[:login]}"
+      end
+    end
+
+    "There are #{issues.count} open issues on #{repository} and here is a summary of all of them: #{issues.join("\n\n")}"
+  end
+
+end
+
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
 
@@ -14,22 +64,9 @@ post '/gateway' do
 
   case action
     when 'pullrequest'
-      resp = HTTParty.get(repo_url)
-      resp = JSON.parse resp.body
-      resp_issue = HTTParty.get(issues_url)
-      resp_issue = JSON.parse resp_issue.body
-      total_issue_summary = Array.new
-      resp_issue.each { |x|
-        total_issue_summary.push(x["issue"]["title"])
-        total_issue_summary.push(x["actor"]["login"])
-        total_issue_summary.push(x["issue"]["html_url"])
-        total_issue_summary.push(x["created_at"])
-      }
-      respond_message "There are #{resp['open_issues_count']} open issues on #{repo} and here is a summary of all of them:
- '#{total_issue_summary.join("\n")}'"
+      respond_message PullRequest.new(repo).message_output
     when 'issues'
-      resp = HTTParty.get(repo_url)
-      resp = JSON.parse resp.body
+      resp = JSON.parse HTTParty.get(repo_url).body
       respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
     when 'help'
       respond_message "Hi there my name is Kong Bot. I'm here to provide
